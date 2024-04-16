@@ -1,24 +1,23 @@
-const express = require('express');
-const router = express.Router()
-const { auth } = require('../middleware/auth')
-const { register,getUser } = require('../controllers/user_controller')
+const express = require("express");
+const router = express.Router();
+const { auth } = require("../middleware/auth");
+const { register, getUser } = require("../controllers/user_controller");
 
-
-const multer = require('multer')
+const multer = require("multer");
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './uploads/')
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    }
-})
+  destination: function (req, file, cb) {
+    cb(null, "./images/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
 
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage });
 
-router.post('/register', register)
-router.get('/getUser', getUser)
+router.post("/register", register);
+router.get("/get-users", getUser);
 //router.post('/startTextChat', startTextChat);
 // router.post('/fetchAppointments', fetchAppointments)
 // router.post('/createPost', auth, upload.single('postImage'), createPost)
@@ -31,7 +30,4 @@ router.get('/getUser', getUser)
 // router.post('/forgotPassword', forgotPassword);
 // router.post('/resetPassord', resetPassord);
 
-
-
-
-module.exports = router
+module.exports = router;

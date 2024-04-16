@@ -1,24 +1,23 @@
 {
   "development": {
     "username": "root",
-    "password": "",
+    "password": "root",
     "database": "XploreApp",
     "host": "localhost",
     "dialect": "mysql"
-  
   },
   "test": {
     "username": "root",
-    "password": null,
+    "password": "root",
     "database": "XploreApp",
-    "host": "127.0.0.1",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": null,
+    "password": "root",
     "database": "XploreApp",
-    "host": "127.0.0.1",
+    "host": "localhost",
     "dialect": "mysql"
   }
 }
