@@ -6,8 +6,11 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const session = require("express-session");
 const app = express();
+
+const cors = require('cors')
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+const userRoutes = require('./routes/user_route')
 
 app.use(
   session({
@@ -20,6 +23,12 @@ app.use(
 
 // app.use("/api/user", user);
 // app.use("/api/category", category);
+
+app.use("/api/user", userRoutes)
+
+app.use('/uploads', express.static('uploads'))
+app.use(cors())
+
 app.get("", (req, res)=>{
   res.send({
     "status":true,
