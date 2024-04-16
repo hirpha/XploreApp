@@ -21,6 +21,7 @@ app.use(
   })
 );
 
+const { notFound, errorHandler } = require('./middleware/error_middleware')
 // app.use("/api/user", user);
 // app.use("/api/category", category);
 
@@ -29,6 +30,8 @@ app.use("/api/user", userRoutes)
 app.use('/uploads', express.static('uploads'))
 app.use(cors())
 
+app.use(notFound)
+app.use(errorHandler)
 app.get("", (req, res)=>{
   res.send({
     "status":true,

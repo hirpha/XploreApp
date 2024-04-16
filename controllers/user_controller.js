@@ -6,19 +6,20 @@ const nodemailer = require("nodemailer");
 
 
 const jwt = require('jsonwebtoken')
-const User = require('../models/User');
+const {User} = require('../models');
 
 const register = asyncHandler(async (req, res) => {
-
+console.log(req.body)
     const { name, password, email } = req.body
 
-    const user = User.create({
+    const user =await User.createAccount({
         name: name,
         email: email,
         password: password
       })
 
-        res.send(user)
+
+       console.log(user)
         if(user){
 
             res.send(user)
@@ -29,8 +30,22 @@ const register = asyncHandler(async (req, res) => {
     }
 
 })
+const getUser = asyncHandler(async (req, res) => {
+console.log("waiting")
+  const user =  await User.findAll()
+  if(user){
+    res.send(user)
+  } else{
+    res.send({
+        "status":false,
+        "message":"user note found"
+    })
+  }
+
+})
 
 
 module.exports = {
-    register
+    register,
+    getUser
 }

@@ -4,6 +4,7 @@ app = require("./app");
 
 const db = require('./models')
 db.sequelize.sync().then((e)=>console.log("afasfsaf"))
+
 const port = 5550;
 app.listen(port, () => {
   
