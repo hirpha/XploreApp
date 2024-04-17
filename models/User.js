@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      phone_number: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -22,17 +27,17 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-    },
-    {
-      defaultScope: {
-        attributes: { exclude: ["password"] }, // Exclude 'password' field by default
-      },
-      scopes: {
-        withPassword: {
-          attributes: { include: ["password"] }, // Include 'password' field when explicitly requested
-        },
-      },
     }
+    // {
+    //   defaultScope: {
+    //     attributes: { exclude: ["password"] }, // Exclude 'password' field by default
+    //   },
+    //   scopes: {
+    //     withPassword: {
+    //       attributes: { include: ["password"] }, // Include 'password' field when explicitly requested
+    //     },
+    //   },
+    // }
   );
 
   User.beforeSave((user) => {
@@ -45,6 +50,15 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
+  // User.prototype.changePassword = async function (oldPassword, newPassword) {
+  //   const isMatch = await bcrypt.compare(oldPassword, this.password);
+  //   if (!isMatch) {
+  //     throw new Error("Invalid old password");
+  //   }
+  //   this.password = await bcrypt.hash(newPassword, 10);
+  //   const tt = await this.save();
+  //   return tt;
+  // };
   User.prototype.comparePassword = function (password, cb) {
     bcrypt.compare(password, this.password, function (err, isMatch) {
       if (err) {

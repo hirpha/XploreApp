@@ -1,9 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const { auth } = require("../middleware/auth");
-const { register, getUser } = require("../controllers/user_controller");
+const {
+  register,
+  getUser,
+  changePassword,
+  loginUser,
+  forgetPassword,
+  getUsers,
+} = require("../controllers/user_controller");
 
 const multer = require("multer");
+const Validator = require("../middleware/validator");
+const loginWithPhoneNumberSchema = require("../validator/login_with_phone_number");
+const registerValidator = require("../validator/register_validator");
+const changePasswordValidator = require("../validator/change_password_validator");
+const forgetPasswordValidator = require("../validator/forget_password_validator");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -16,8 +28,22 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.post("/register", register);
-router.get("/get-users", getUser);
+router.post("/register", Validator(registerValidator), register);
+router.post("/login", Validator(loginWithPhoneNumberSchema), loginUser);
+router.post(
+  "/forget-password",
+  Validator(forgetPasswordValidator),
+  auth,
+  forgetPassword
+);
+router.get("/get-users", auth, getUsers);
+router.get("/get-user", auth, getUser);
+router.put(
+  "/change-password",
+  Validator(changePasswordValidator),
+  auth,
+  changePassword
+);
 //router.post('/startTextChat', startTextChat);
 // router.post('/fetchAppointments', fetchAppointments)
 // router.post('/createPost', auth, upload.single('postImage'), createPost)
