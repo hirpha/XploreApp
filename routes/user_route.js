@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { auth } = require("../middleware/auth");
-const { register, getUser } = require("../controllers/user_controller");
+const { register, getUser,changePassword, loginUser } = require("../controllers/user_controller");
 
 const multer = require("multer");
 
@@ -17,7 +17,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post("/register", register);
-router.get("/get-users", getUser);
+router.post("/login", loginUser);
+router.get("/get-users",auth, getUser);
+router.put("/change-password",auth, changePassword);
 //router.post('/startTextChat', startTextChat);
 // router.post('/fetchAppointments', fetchAppointments)
 // router.post('/createPost', auth, upload.single('postImage'), createPost)

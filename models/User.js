@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      phone_number: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique:true
+      },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -23,16 +28,16 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {
-      defaultScope: {
-        attributes: { exclude: ["password"] }, // Exclude 'password' field by default
-      },
-      scopes: {
-        withPassword: {
-          attributes: { include: ["password"] }, // Include 'password' field when explicitly requested
-        },
-      },
-    }
+    // {
+    //   defaultScope: {
+    //     attributes: { exclude: ["password"] }, // Exclude 'password' field by default
+    //   },
+    //   scopes: {
+    //     withPassword: {
+    //       attributes: { include: ["password"] }, // Include 'password' field when explicitly requested
+    //     },
+    //   },
+    // }
   );
 
   User.beforeSave((user) => {
@@ -45,6 +50,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
+  User.prototype.changePassword = async function (oldPassword, newPassword) {
+    const isMatch = await bcrypt.compare(oldPassword, this.password);
+    if (!isMatch) {
+      throw new Error('Invalid old password');
+    }
+    this.password = await bcrypt.hash(newPassword, 10);
+    await this.save();
+  };
   User.prototype.comparePassword = function (password, cb) {
     bcrypt.compare(password, this.password, function (err, isMatch) {
       if (err) {
@@ -60,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
   User.prototype.toJSON = function () {
     var values = Object.assign({}, this.get());
 
-    delete values.password;
+    // delete values.password;
     return values;
   };
 

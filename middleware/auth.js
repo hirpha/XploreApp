@@ -1,15 +1,18 @@
 var jwt =  require('jsonwebtoken')
 const asyncHandler = require('express-async-handler')
-const User = require('../models/User')
+const { User } = require('../models')
 
 const auth = asyncHandler(async (req, res, next) => {
-
+console.log(req.headers.authorization)
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
         const token = req.headers.authorization.replace('Bearer ', '')
-        const decoded = jwt.verify(token, 'telemedicine')
+        
+        const decoded =  jwt.verify(token, 'XploreApp')
+        console.log(decoded)
 
         try {
-            const user = await User.findById(decoded.id)
+            const user = await User.findByPk(decoded._id)
+           
             if (user) {
                 req.user = user
                 next()
